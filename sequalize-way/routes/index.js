@@ -27,8 +27,18 @@ router.get("/users/:id", (req, res) => {
 router.delete("/users/:id", (req, res) => {
   res.send("This is delete");
 });
-router.put("/users/:userId", (req, res) => {
-  res.send("This is put");
+router.put("/users/:id", (req, res) => {
+ 
+
+  if(typeof +req.params.id === 'number'){
+      return res.sendStatus(400);
+  }
+  models.User.update(
+    { firstName: req.body.firstName },
+    { where: { id: req.params.id } }
+  ).then(() => {
+    res.sendStatus(204);
+  })
 });
 
 module.exports = router;
