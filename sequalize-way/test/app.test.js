@@ -95,17 +95,45 @@ describe("app", () => {
     });
   });
 
-  it.only("should not update user if id is not sent", done => {
-    
-      chai
-        .request(app)
-        .put("/api/users/randomString")
-        .send({ firstName: "Johnny" })
-        .end((req, res) => {
-          expect(res.status).to.be.equal(400);
-          done();
-        });
+  it("should not update user if id is not sent", done => {
+    chai
+      .request(app)
+      .put("/api/users/randomString")
+      .send({ firstName: "Johnny" })
+      .end((req, res) => {
+        expect(res.status).to.be.equal(400);
+        done();
+      });
   });
 
-  it("should get user by id", () => {});
+  it("should delete user by id", done => {
+    models.User.findOne({ where: { email: "Jane@Doe.com" } }).then(user => {
+      const existingUser = user.get({
+        plain: true
+      });
+      chai
+        .request(app)
+        .delete("/api/users/" + existingUser.id)
+        .end((req, res) => {
+          expect(res.status).to.be.equal(204);
+          done();
+        });
+    });
+  });
+
+  it.only("should get user by id", done => {
+    models.User.findOne({ where: { email: "Jane@Doe.com" } }).then(user => {
+      const existingUser = user.get({
+        plain: true
+      });
+      chai
+        .request(app)
+        .get("/api/users/" + existingUser.id)
+        .end((req, res) => {
+          expect(res.status).to.be.equal(200);
+          expect(res.body.id).to.be.equal(existingUser.id)
+          done();
+        });
+    });
+  });
 });

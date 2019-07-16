@@ -22,23 +22,29 @@ router.get("/users", (req, res) => {
 });
 
 router.get("/users/:id", (req, res) => {
-  res.send("This is get by id");
+  models.User.findOne({ where: { id: req.params.id } }).then(user => {
+    res.status(200).send(user);
+  });
 });
-router.delete("/users/:id", (req, res) => {
-  res.send("This is delete");
-});
-router.put("/users/:id", (req, res) => {
- 
 
-  if(typeof +req.params.id === 'number'){
-      return res.sendStatus(400);
+router.delete("/users/:id", (req, res) => {
+  models.User.destroy({
+    where: { id: req.params.id }
+  }).then(() => {
+    res.sendStatus(204);
+  });
+});
+
+router.put("/users/:id", (req, res) => {
+  if (typeof +req.params.id === "number") {
+    return res.sendStatus(400);
   }
   models.User.update(
     { firstName: req.body.firstName },
     { where: { id: req.params.id } }
   ).then(() => {
     res.sendStatus(204);
-  })
+  });
 });
 
 module.exports = router;
