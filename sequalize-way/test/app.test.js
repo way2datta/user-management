@@ -42,7 +42,7 @@ describe("app", () => {
       });
   });
 
-  it.only("should get all users", (done) => {
+  it("should get all users", done => {
     chai
       .request(app)
       .get("/api/users")
@@ -54,9 +54,32 @@ describe("app", () => {
       });
   });
 
-  it("should create user", () => {});
+  it("should create user", done => {
+    chai
+      .request(app)
+      .post("/api/users")
+      .send({ firstName: "John", lastName: "Doe", email: "John@Doe.com" })
+      .end((req, res) => {
+        expect(res.status).to.be.equal(201);
+        expect(res.body.email).to.be.equal("John@Doe.com");
+        done();
+      });
+  });
 
-  it("should update user", () => {});
+  it("should not create user if email is missing", done => {
+    chai
+      .request(app)
+      .post("/api/users")
+      .send({ firstName: "John", lastName: "Doe" })
+      .end((req, res) => {
+        expect(res.status).to.be.equal(400);
+        expect(res.body).to.be.deep.equal({
+          errors: { message: "Email is required.", field: "Email" }
+        });
+        done();
+      });
+  });
+  it.only("should update user", () => {});
 
   it("should get user by id", () => {});
 });
