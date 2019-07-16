@@ -95,17 +95,6 @@ describe("app", () => {
     });
   });
 
-  it("should not update user if id is not sent", done => {
-    chai
-      .request(app)
-      .put("/api/users/randomString")
-      .send({ firstName: "Johnny" })
-      .end((req, res) => {
-        expect(res.status).to.be.equal(400);
-        done();
-      });
-  });
-
   it("should delete user by id", done => {
     models.User.findOne({ where: { email: "Jane@Doe.com" } }).then(user => {
       const existingUser = user.get({
@@ -121,7 +110,7 @@ describe("app", () => {
     });
   });
 
-  it.only("should get user by id", done => {
+  it("should get user by id", done => {
     models.User.findOne({ where: { email: "Jane@Doe.com" } }).then(user => {
       const existingUser = user.get({
         plain: true
