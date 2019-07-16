@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const models = require(__dirname + "/../models");
+const userController = require(__dirname + "/../controllers/user")
 
 router.post("/", (req, res) => {
   if (req.body.email === undefined) {
@@ -16,11 +17,8 @@ router.post("/", (req, res) => {
   });
 });
 
-router.get("/", (req, res) => {
-  models.User.findAll().then(users => {
-    res.send(users);
-  });
-});
+router.get("/", userController.findAllUsers);
+
 
 router.get("/:id", (req, res) => {
   models.User.findOne({ where: { id: req.params.id } }).then(user => {
