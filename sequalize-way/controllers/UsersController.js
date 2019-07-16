@@ -7,17 +7,12 @@ const findAll = (req, res) => {
 };
 
 const update = (req, res) => {
-  if (req.body.email === undefined) {
-    const errors = {
-      errors: { message: "Email is required.", field: "Email" }
-    };
-    res.status(400);
-    return res.send(errors);
-  }
-  models.User.create(req.body).then(user => {
-    res.status(201);
-    res.send(user);
-  });
+  models.User.update(
+    { firstName: req.body.firstName },
+    { where: { id: req.params.id } }
+).then(() => {
+    res.sendStatus(204);
+});
 };
 
 const getById = (req, res) => {
@@ -26,8 +21,33 @@ const getById = (req, res) => {
   });
 };
 
+const create = (req, res) => {
+  if (req.body.email === undefined) {
+      const errors = {
+          errors: { message: "Email is required.", field: "Email" }
+      };
+      res.status(400);
+      return res.send(errors);
+  }
+  models.User.create(req.body).then(user => {
+      res.status(201);
+      res.send(user);
+  });
+};
+
+const deleteUser = (req, res) => {
+  models.User.destroy({
+      where: { id: req.params.id }
+  }).then(() => {
+      res.sendStatus(204);
+  });
+}
+ 
+
 module.exports = {
   findAll,
   update,
-  getById
+  getById,
+  create,
+  deleteUser
 };

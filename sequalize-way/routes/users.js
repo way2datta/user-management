@@ -3,25 +3,10 @@ const router = express.Router();
 const models = require(__dirname + "/../models");
 const userController = require(__dirname + "/../controllers/UsersController")
 
-router.post("/", userController.update);
 router.get("/", userController.findAll);
+router.put("/:id", userController.update);
 router.get("/:id", userController.getById);
-
-router.delete("/:id", (req, res) => {
-  models.User.destroy({
-    where: { id: req.params.id }
-  }).then(() => {
-    res.sendStatus(204);
-  });
-});
-
-router.put("/:id", (req, res) => {
-  models.User.update(
-    { firstName: req.body.firstName },
-    { where: { id: req.params.id } }
-  ).then(() => {
-    res.sendStatus(204);
-  });
-});
+router.post("/", userController.create);
+router.delete("/:id", userController.deleteUser);
 
 module.exports = router;
