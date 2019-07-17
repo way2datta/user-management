@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const models = require(__dirname + "/../models");
-const userController = require(__dirname + "/../controllers/UsersController")
+import UsersController from "./../controllers/UsersController";
+
+const userController = new UsersController();
 
 router.get("/", userController.findAll);
 router.put("/:id", userController.update);
