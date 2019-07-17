@@ -1,27 +1,26 @@
-const models = require(__dirname + "/../models");
+import models from "./../models";
 
-const findAll = (req, res) => {
-  models.User.findAll().then(users => {
-    res.send(users);
-  });
+const findAll = async (req, res) => {
+  const users = await models.User.findAll();
+  res.send(users);
 };
 
-const update = (req, res) => {
-  models.User.update(
+const update = async (req, res) => {
+  var rowsAffected = await models.User.update(
     { firstName: req.body.firstName },
     { where: { id: req.params.id } }
-  ).then(() => {
-    res.sendStatus(204);
-  });
+  );
+  res.sendStatus(204);
 };
 
-const getById = (req, res) => {
-  models.User.findOne({ where: { id: req.params.id } }).then(user => {
-    res.status(200).send(user);
+const getById = async (req, res) => {
+  const existingUser = await models.User.findOne({
+    where: { id: req.params.id }
   });
+  res.status(200).send(existingUser);
 };
 
-const create = (req, res) => {
+const create = async (req, res) => {
   if (req.body.email === undefined) {
     const errors = {
       errors: { message: "Email is required.", field: "Email" }
@@ -29,18 +28,16 @@ const create = (req, res) => {
     res.status(400);
     return res.send(errors);
   }
-  models.User.create(req.body).then(user => {
-    res.status(201);
-    res.send(user);
-  });
+  const newUser = await models.User.create(req.body);
+  res.status(201);
+  res.send(newUser);
 };
 
-const deleteUser = (req, res) => {
-  models.User.destroy({
+const deleteUser = async (req, res) => {
+  await models.User.destroy({
     where: { id: req.params.id }
-  }).then(() => {
-    res.sendStatus(204);
   });
+  res.sendStatus(204);
 };
 
 module.exports = {
