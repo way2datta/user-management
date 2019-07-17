@@ -52,7 +52,7 @@ describe("Users", () => {
       });
   });
 
-  it.only("should not create user if email is missing", done => {
+  it("should not create user if email is missing", done => {
     chai
       .request(app)
       .post("/api/users")
@@ -65,7 +65,7 @@ describe("Users", () => {
   });
   
   it("should update user", done => {
-    models.User.findOne({ where: { email: "Jane@Doe.com" } }).then(user => {
+    models.User.findOne({}).then(user => {
       const existingUser = user.get({
         plain: true
       });
@@ -81,7 +81,7 @@ describe("Users", () => {
   });
 
   it("should delete user by id", done => {
-    models.User.findOne({ where: { email: "Jane@Doe.com" } }).then(user => {
+    models.User.findOne().then(user => {
       const existingUser = user.get({
         plain: true
       });
@@ -96,7 +96,7 @@ describe("Users", () => {
   });
 
   it("should get user by id", done => {
-    models.User.findOne({ where: { email: "Jane@Doe.com" } }).then(user => {
+    models.User.findOne().then(user => {
       const existingUser = user.get({
         plain: true
       });
