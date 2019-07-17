@@ -1,5 +1,6 @@
 import models from "./../models";
 import HttpStatus from "http-status-codes";
+import validate from "./../validators/UserValidator";
 
 const findAll = async (req, res) => {
   const users = await models.User.findAll();
@@ -21,12 +22,9 @@ const getById = async (req, res) => {
 };
 
 const create = async (req, res) => {
-  if (req.body.email === undefined) {
-    const errors = {
-      errors: { message: "Email is required.", field: "Email" }
-    };
-    res.status(HttpStatus.BAD_REQUEST);
-    return res.send(errors);
+  const validationErrors = validate(req.body);
+  if (validationErrors) {
+    return res.status(HttpStatus.BAD_REQUEST).send(validationErrors);
   }
   const newUser = await models.User.create(req.body);
   res.status(HttpStatus.CREATED);
