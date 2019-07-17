@@ -1,6 +1,7 @@
 import chai, {expect} from "chai";
 import chaiHttp from  "chai-http";
 import models from "../models";
+import HttpStatus from "http-status-codes";
 
 chai.use(chaiHttp);
 
@@ -32,7 +33,7 @@ describe("Users", () => {
       .request(app)
       .get("/api/users")
       .end((req, res) => {
-        expect(res.status).to.be.equal(200);
+        expect(res.status).to.be.equal(HttpStatus.OK);
         expect(res).to.be.json;
         expect(res.body.length).to.be.equal(1);
         done();
@@ -45,7 +46,7 @@ describe("Users", () => {
       .post("/api/users")
       .send({ firstName: "John", lastName: "Doe", email: "John@Doe.com" })
       .end((req, res) => {
-        expect(res.status).to.be.equal(201);
+        expect(res.status).to.be.equal(HttpStatus.CREATED);
         expect(res.body.email).to.be.equal("John@Doe.com");
         done();
       });
@@ -57,7 +58,7 @@ describe("Users", () => {
       .post("/api/users")
       .send({ firstName: "John", lastName: "Doe" })
       .end((req, res) => {
-        expect(res.status).to.be.equal(400);
+        expect(res.status).to.be.equal(HttpStatus.BAD_REQUEST);
         expect(res.body).to.be.deep.equal({
           errors: { message: "Email is required.", field: "Email" }
         });
@@ -75,7 +76,7 @@ describe("Users", () => {
         .put("/api/users/" + existingUser.id)
         .send({ firstName: "Johnny" })
         .end((req, res) => {
-          expect(res.status).to.be.equal(204);
+          expect(res.status).to.be.equal(HttpStatus.NO_CONTENT);
           done();
         });
     });
@@ -90,7 +91,7 @@ describe("Users", () => {
         .request(app)
         .delete("/api/users/" + existingUser.id)
         .end((req, res) => {
-          expect(res.status).to.be.equal(204);
+          expect(res.status).to.be.equal(HttpStatus.NO_CONTENT);
           done();
         });
     });
@@ -105,7 +106,7 @@ describe("Users", () => {
         .request(app)
         .get("/api/users/" + existingUser.id)
         .end((req, res) => {
-          expect(res.status).to.be.equal(200);
+          expect(res.status).to.be.equal(HttpStatus.OK);
           expect(res.body.id).to.be.equal(existingUser.id)
           done();
         });
