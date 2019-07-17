@@ -6,10 +6,9 @@ const findAll = async (req, res) => {
 };
 
 const update = async (req, res) => {
-  var rowsAffected = await models.User.update(
-    { firstName: req.body.firstName },
-    { where: { id: req.params.id } }
-  );
+  var rowsAffected = await models.User.update(req.body, {
+    where: { id: req.params.id }
+  });
   res.sendStatus(204);
 };
 
