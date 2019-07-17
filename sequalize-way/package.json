@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test  ./node_modules/.bin/mocha --require @babel/register",
-    "start": "nodemon --exec babel-node  ./bin/www"
+    "test": "cross-env NODE_ENV=test  ./node_modules/.bin/mocha --require @babel/register",
+    "start": "cross-env NODE_ENV=development nodemon --exec babel-node  ./bin/www"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +26,7 @@
     "@babel/register": "^7.4.4",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
+    "cross-env": "^5.2.0",
     "mocha": "^6.1.4",
     "nodemon": "^1.19.1"
   }
