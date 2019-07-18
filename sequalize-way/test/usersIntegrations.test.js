@@ -104,6 +104,20 @@ describe("Users", () => {
         });
     });
   });
+
+  it("should respond with not found if choose to update user that does not exists", () => {
+    chai
+      .request(app)
+      .put("/api/users/1001")
+      .send({
+        firstName: "Jane",
+        lastName: "Doe",
+        email: "Jane@Doe.com"
+      })
+      .end((req, res) => {
+        expect(res.status).to.be.equal(HttpStatus.NOT_FOUND);
+      });
+  });
   it("should delete user by id", done => {
     models.User.findOne().then(user => {
       const existingUser = user.get({
@@ -117,6 +131,16 @@ describe("Users", () => {
           done();
         });
     });
+  });
+
+  it("should get not found status when choose to delete user that does not exists", done => {
+    chai
+      .request(app)
+      .delete("/api/users/1001")
+      .end((req, res) => {
+        expect(res.status).to.be.equal(HttpStatus.NOT_FOUND);
+        done();
+      });
   });
 
   it("should get user by id", done => {
@@ -133,5 +157,15 @@ describe("Users", () => {
           done();
         });
     });
+  });
+
+  it("should get not found status when user by id is not present", done => {
+    chai
+      .request(app)
+      .get("/api/users/1001")
+      .end((req, res) => {
+        expect(res.status).to.be.equal(HttpStatus.NOT_FOUND);
+        done();
+      });
   });
 });
