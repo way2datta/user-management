@@ -3,7 +3,7 @@ import validateUser from "../validators/validateUser";
 import UserService from "./../services/UserService";
 
 export default class UsersController {
-constructor(userService) {
+  constructor(userService) {
     this.service = userService || new UserService();
   }
   create = async (req, res) => {
@@ -11,6 +11,7 @@ constructor(userService) {
     if (validationErrors) {
       return res.status(HttpStatus.BAD_REQUEST).send(validationErrors);
     }
+
     const newUser = await this.service.create(req.body);
     res.status(HttpStatus.CREATED);
     res.send(newUser);
@@ -39,7 +40,7 @@ constructor(userService) {
   getById = async (req, res) => {
     const existingUser = await this.service.getById(req.params.id);
     if (!existingUser) {
-      return res.sendStatus(HttpStatus.NOT_FOUND);
+      return res.status(HttpStatus.NOT_FOUND).send();
     }
     res.status(HttpStatus.OK).send(existingUser);
   };
