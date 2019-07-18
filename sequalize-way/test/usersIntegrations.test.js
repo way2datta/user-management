@@ -1,5 +1,5 @@
-import chai, {expect} from "chai";
-import chaiHttp from  "chai-http";
+import chai, { expect } from "chai";
+import chaiHttp from "chai-http";
 import models from "../models";
 import HttpStatus from "http-status-codes";
 
@@ -52,18 +52,19 @@ describe("Users", () => {
       });
   });
 
-  it("should not create user if email is missing", done => {
+  it("should not create user if required fields are missing", done => {
     chai
       .request(app)
       .post("/api/users")
-      .send({ firstName: "John", lastName: "Doe" })
+      .send({ firstName: "John" })
       .end((req, res) => {
         expect(res.status).to.be.equal(HttpStatus.BAD_REQUEST);
-        expect(res.body).to.have.property('email');
+        expect(res.body).to.have.property("email");
+        expect(res.body).to.have.property("lastName");
         done();
       });
   });
-  
+
   it("should update user", done => {
     models.User.findOne({}).then(user => {
       const existingUser = user.get({
@@ -72,7 +73,11 @@ describe("Users", () => {
       chai
         .request(app)
         .put("/api/users/" + existingUser.id)
-        .send({ firstName: "Johnny" })
+        .send({
+          firstName: "Jane",
+          lastName: "Doe",
+          email: "Jane@Doe.com"
+        })
         .end((req, res) => {
           expect(res.status).to.be.equal(HttpStatus.NO_CONTENT);
           done();
@@ -80,6 +85,25 @@ describe("Users", () => {
     });
   });
 
+  it("should not update user if required fields are missing", done => {
+    models.User.findOne({}).then(user => {
+      const existingUser = user.get({
+        plain: true
+      });
+      chai
+        .request(app)
+        .put("/api/users/" + existingUser.id)
+        .send({
+          lastName: "Doe"
+        })
+        .end((req, res) => {
+          expect(res.status).to.be.equal(HttpStatus.BAD_REQUEST);
+          expect(res.body).to.have.property("email");
+          expect(res.body).to.have.property("firstName");
+          done();
+        });
+    });
+  });
   it("should delete user by id", done => {
     models.User.findOne().then(user => {
       const existingUser = user.get({
@@ -105,7 +129,7 @@ describe("Users", () => {
         .get("/api/users/" + existingUser.id)
         .end((req, res) => {
           expect(res.status).to.be.equal(HttpStatus.OK);
-          expect(res.body.id).to.be.equal(existingUser.id)
+          expect(res.body.id).to.be.equal(existingUser.id);
           done();
         });
     });
