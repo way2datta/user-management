@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=test  ./node_modules/.bin/mocha --require @babel/register",
+    "test": "cross-env NODE_ENV=test  ./node_modules/.bin/mocha --require @babel/register --require  @babel/polyfill ./test/**/*.js",
     "start": "cross-env NODE_ENV=development nodemon --exec babel-node  ./bin/www"
   },
   "keywords": [],
@@ -31,6 +31,7 @@
     "chai-http": "^4.3.0",
     "cross-env": "^5.2.0",
     "mocha": "^6.1.4",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "sinon": "^7.3.2"
   }
 }
