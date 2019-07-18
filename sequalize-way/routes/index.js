@@ -1,6 +1,7 @@
-const express = require("express");
+import express from "express";
+
 const router = express.Router();
-const userRouter = require(__dirname+"/users");
+const userRouter = require("./users");
 
 router.use('/users', userRouter);
 
