@@ -1,4 +1,4 @@
-import Validator from "./../../validators/validateUser";
+import Validator from "./../../src/validators/validateUser";
 import { expect } from "chai";
 
 describe("validateUser", () => {

@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import sinon from "sinon";
-import UserService from "../../services/UserService";
+import UserService from "../../src/services/UserService";
 
 describe("UserService", () => {
   it("should find all users", done => {

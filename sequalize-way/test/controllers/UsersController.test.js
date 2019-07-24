@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import UsersController from "./../../controllers/UsersController";
+import UsersController from "./../../src/controllers/UsersController";
 import sinon from "sinon";
 
 describe("UsersController", () => {

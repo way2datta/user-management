@@ -1,11 +1,11 @@
 import chai, { expect } from "chai";
 import chaiHttp from "chai-http";
-import models from "../models";
+import models from "./../src/models";
 import HttpStatus from "http-status-codes";
 
 chai.use(chaiHttp);
 
-import app from "../app.js";
+import app from "./../src/app.js";
 
 describe("Users", () => {
   beforeEach(done => {

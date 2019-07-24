@@ -3,7 +3,7 @@ import chaiHttp from  "chai-http";
 
 chai.use(chaiHttp);
 
-import app from "./../app.js";
+import app from "./../src/app";
 
 describe("app", () => {
   it("should return hello world", () => {

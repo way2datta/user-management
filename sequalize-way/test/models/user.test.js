@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import models from "./../../models";
+import models from "../../src/models";
 
 describe("UserModel", () => {
   const firstName = "Johny";
