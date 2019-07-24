@@ -19,7 +19,8 @@ export default class UsersController {
 
   findAll = async (req, res) => {
     const users = await this.service.findAll();
-    res.status(HttpStatus.OK).send(users);
+    res.status(HttpStatus.OK);
+    res.send(users);
   };
 
   update = async (req, res, next) => {
@@ -40,9 +41,11 @@ export default class UsersController {
   getById = async (req, res) => {
     const existingUser = await this.service.getById(req.params.id);
     if (!existingUser) {
-      return res.status(HttpStatus.NOT_FOUND).send();
+      res.status(HttpStatus.NOT_FOUND);
+      return res.send();
     }
-    res.status(HttpStatus.OK).send(existingUser);
+    res.status(HttpStatus.OK);
+    res.send(existingUser);
   };
 
   destroy = async (req, res) => {
