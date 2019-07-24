@@ -2,7 +2,7 @@ import { expect } from "chai";
 import UsersController from "./../../controllers/UsersController";
 import sinon from "sinon";
 
-describe.only("UsersController", () => {
+describe("UsersController", () => {
   const req = {};
   let res = {};
 
