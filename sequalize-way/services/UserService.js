@@ -5,7 +5,7 @@ export default class UserService {
     this.UserModel = userModel || User;
   }
 
-  static create(userModel) {
+  static createInstance(userModel) {
     return new UserService(userModel);
   }
 
