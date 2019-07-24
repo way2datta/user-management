@@ -1,22 +1,30 @@
-import models from "../models";
+import { User } from "../models";
 
 export default class UserService {
+  constructor(userModel) {
+    this.UserModel = userModel || User;
+  }
+
+  static create(userModel) {
+    return new UserService(userModel);
+  }
+
   create = async user => {
-    const newUser = await models.User.create(user);
+    const newUser = await this.UserModel.create(user);
     return newUser;
   };
 
   findAll = async () => {
-    return await models.User.findAll();
+    return await this.UserModel.findAll();
   };
 
   update = async (newValues, id) => {
     await this.getById(id);
-    await models.User.update(newValues, { where: { id: id } });
+    await this.UserModel.update(newValues, { where: { id: id } });
   };
 
   getById = async id => {
-    const existingUser = await models.User.findOne({
+    const existingUser = await this.UserModel.findOne({
       where: { id: id }
     });
     return existingUser;
@@ -24,7 +32,7 @@ export default class UserService {
 
   destroy = async id => {
     await this.getById(id);
-    await models.User.destroy({
+    await this.UserModel.destroy({
       where: { id: id }
     });
   };

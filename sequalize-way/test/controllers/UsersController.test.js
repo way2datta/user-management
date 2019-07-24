@@ -1,6 +1,8 @@
 import chai, { expect } from "chai";
 import UsersController from "./../../controllers/UsersController";
+import UserService from "./../../services/UserService";
 import sinon from "sinon";
+import { validateUser } from "./../../validators/validateUser";
 
 describe("UsersController", () => {
   let res;
@@ -23,22 +25,21 @@ describe("UsersController", () => {
       done();
     });
   });
-
-  it("should get all users", done => {
+  it("should get by id", done => {
     const service = {
-      findAll: () => {}
+      getById: () => {}
     };
-    var spy = sinon.spy(service, "findAll");
+    var spy = sinon.stub(service, "getById");
 
     res = {
       json: sinon.spy(),
-      status: sinon.stub().returns({ send: sinon.spy }) // to spy res.status(500).end()
+      status: sinon.stub().returns({ send: sinon.spy })  
     };
 
     const controller = new UsersController(service);
-    const req = {};
-    controller.findAll(req, res).then(() => {
-      expect(spy.calledOnce).to.be.ok;
+    const req = { params: { id: 1 } };
+    controller.getById(req, res).then(() => {
+      expect(spy.calledWith).to.be.ok;
       done();
     });
   });
