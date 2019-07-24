@@ -26,18 +26,21 @@ export default class UsersController {
   };
 
   update = async (req, res, next) => {
-    const validationErrors = validateUser(req.body);
+    const validationErrors = this.validator.validate(req.body);
     if (validationErrors) {
-      return res.status(HttpStatus.BAD_REQUEST).send(validationErrors);
+      res.status(HttpStatus.BAD_REQUEST);
+      return res.send(validationErrors);
     }
 
     const existingUser = await this.service.getById(req.params.id);
     if (!existingUser) {
-      return res.sendStatus(HttpStatus.NOT_FOUND);
+      res.status(HttpStatus.NOT_FOUND);
+      return res.send();
     }
 
     await this.service.update(req.body, req.params.id);
-    res.sendStatus(HttpStatus.NO_CONTENT);
+    res.status(HttpStatus.NO_CONTENT);
+    res.send();
   };
 
   getById = async (req, res) => {
@@ -56,6 +59,7 @@ export default class UsersController {
       return res.sendStatus(HttpStatus.NOT_FOUND);
     }
     await this.service.destroy(req.params.id);
-    res.sendStatus(HttpStatus.NO_CONTENT);
+    res.status(HttpStatus.NO_CONTENT);
+    res.send();
   };
 }

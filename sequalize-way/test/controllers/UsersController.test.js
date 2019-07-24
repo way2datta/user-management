@@ -2,7 +2,7 @@ import { expect } from "chai";
 import UsersController from "./../../controllers/UsersController";
 import sinon from "sinon";
 
-describe("UsersController", () => {
+describe.only("UsersController", () => {
   const req = {};
   let res = {};
 
@@ -18,6 +18,7 @@ describe("UsersController", () => {
       }
     };
   });
+
   describe("findAll", () => {
     it("should return status ok", done => {
       const service = {
@@ -99,7 +100,7 @@ describe("UsersController", () => {
     });
   });
 
-  describe.only("Create", () => {
+  describe("Create", () => {
     it("should return status created", done => {
       const service = {
         create() {
@@ -119,7 +120,7 @@ describe("UsersController", () => {
       });
     });
     it("should return created user", done => {
-      const newUser = {firsName: "john"};
+      const newUser = { firsName: "john" };
       const service = {
         create() {
           return newUser;
@@ -146,13 +147,112 @@ describe("UsersController", () => {
       };
       const validator = {
         validate() {
-          return { 'firstName': 'firstName is required'}
+          return { 'firstName': 'firstName is required' }
         }
       };
       const controller = new UsersController(service, validator);
       const req = { params: { id: 1 } };
       controller.create(req, res).then(() => {
         expect(res.statusCalledWith).to.be.equal(400);
+        done();
+      });
+    });
+  });
+
+  describe("Update", () => {
+    it("should return status no content", done => {
+      const service = {
+        getById() {
+          return { id: 1 }
+        },
+        update() {
+          return {}
+        }
+      };
+      const validator = {
+        validate() {
+          return undefined
+        }
+      };
+      const controller = new UsersController(service, validator);
+      const req = { params: { id: 1 } };
+      controller.update(req, res).then(() => {
+        expect(res.statusCalledWith).to.be.equal(204);
+        done();
+      });
+    });
+    it("should return status bad request when validation fails", done => {
+      const service = {};
+      const validator = {
+        validate() {
+          return { 'firstName': 'firstName is required' }
+        }
+      };
+      const controller = new UsersController(service, validator);
+      const req = { params: { id: 1 } };
+      controller.update(req, res).then(() => {
+        expect(res.statusCalledWith).to.be.equal(400);
+        done();
+      });
+    });
+    it("should return status not found when choose to update user that doesn't exists", done => {
+      const service = {
+        getById() {
+          return undefined
+        }
+      };
+      const validator = {
+        validate() {
+          return undefined
+        }
+      };
+      const controller = new UsersController(service, validator);
+      const req = { params: { id: 1 } };
+      controller.update(req, res).then(() => {
+        expect(res.statusCalledWith).to.be.equal(404);
+        done();
+      });
+    });
+  });
+
+  describe("Destroy", () => {
+    it("should return status no content", done => {
+      const service = {
+        getById() {
+          return { id: 1 }
+        },
+        destroy() {
+          return {}
+        }
+      };
+      const validator = {
+        validate() {
+          return undefined
+        }
+      };
+      const controller = new UsersController(service, validator);
+      const req = { params: { id: 1 } };
+      controller.destroy(req, res).then(() => {
+        expect(res.statusCalledWith).to.be.equal(204);
+        done();
+      });
+    });
+
+    it("should return status not found when choose to delete user that doesn't exists", done => {
+      const service = {
+        getById() {
+          return undefined
+        }
+      };
+      const validator = {
+        validate() {
+          return undefined
+        }
+      };
+      const controller = new UsersController(service, validator);
+      const req = { params: { id: 1 } };
+      controller.update(req, res).then(() => {
+        expect(res.statusCalledWith).to.be.equal(404);
         done();
       });
     });
