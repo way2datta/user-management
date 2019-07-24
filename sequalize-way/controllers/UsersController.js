@@ -1,15 +1,17 @@
 import HttpStatus from "http-status-codes";
-import validateUser from "../validators/validateUser";
+import UserValidator from "../validators/validateUser";
 import UserService from "./../services/UserService";
 
 export default class UsersController {
-  constructor(userService) {
-    this.service = userService || new UserService();
+  constructor(service, validator) {
+    this.service = service || new UserService();
+    this.validator = validator || new UserValidator();
   }
   create = async (req, res) => {
-    const validationErrors = validateUser(req.body);
+    const validationErrors = this.validator.validate(req.body);
     if (validationErrors) {
-      return res.status(HttpStatus.BAD_REQUEST).send(validationErrors);
+      res.status(HttpStatus.BAD_REQUEST);
+      return res.send(validationErrors);
     }
 
     const newUser = await this.service.create(req.body);
